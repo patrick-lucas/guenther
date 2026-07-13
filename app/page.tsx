@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown"
+import PasswordScreen from "../components/PasswordScreen";
 
 export default function Home() {
+  const [freigeschaltet, setFreigeschaltet] = useState(false);
   const [handbuch, setHandbuch] = useState("Handbuch wird geladen...");
 
 useEffect(() => {
@@ -23,7 +25,15 @@ useEffect(() => {
     });
 }, []);
 
+if (!freigeschaltet) {
   return (
+    <PasswordScreen
+      onSuccess={() => setFreigeschaltet(true)}
+    />
+  );
+}
+
+return (
     <main
       style={{
         padding: "20px",

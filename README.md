@@ -1,0 +1,2 @@
+# guenther
+KI Traiding Assistant 

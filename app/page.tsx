@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import PasswordScreen from "../components/PasswordScreen";
 import Dashboard from "../components/Dashboard";
 import Handbuch from "../components/Handbuch";
+import Tagebuch from "../components/Tagebuch";
 
 export default function Home() {
   const [freigeschaltet, setFreigeschaltet] = useState(false);
@@ -41,6 +42,13 @@ if (seite === "handbuch") {
   return (
     <Handbuch
       handbuch={handbuch}
+      onBack={() => setSeite("dashboard")}
+    />
+  );
+}
+if (seite === "tagebuch") {
+  return (
+    <Tagebuch
       onBack={() => setSeite("dashboard")}
     />
   );

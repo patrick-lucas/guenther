@@ -1,59 +1,75 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown from "react-markdown";
 import PasswordScreen from "../components/PasswordScreen";
+import Dashboard from "../components/Dashboard";
 
 export default function Home() {
   const [freigeschaltet, setFreigeschaltet] = useState(false);
+  const [seite, setSeite] = useState("dashboard");
   const [handbuch, setHandbuch] = useState("Handbuch wird geladen...");
 
-useEffect(() => {
-  fetch("/handbuch.md")
-    .then(async (res) => {
-      console.log("Status:", res.status);
+  useEffect(() => {
+    fetch("/handbuch.md")
+      .then(async (res) => {
+        const text = await res.text();
+        setHandbuch(text);
+      })
+      .catch(() => {
+        setHandbuch("Fehler beim Laden des Handbuchs.");
+      });
+  }, []);
 
-      const text = await res.text();
+  if (!freigeschaltet) {
+    return (
+      <PasswordScreen
+        onSuccess={() => setFreigeschaltet(true)}
+      />
+    );
+  }
 
-      console.log("Textlänge:", text.length);
-
-      setHandbuch(text);
-    })
-    .catch((err) => {
-      console.error(err);
-      setHandbuch("Fehler beim Laden des Handbuchs.");
-    });
-}, []);
-
-if (!freigeschaltet) {
+  if (seite === "dashboard") {
   return (
-    <PasswordScreen
-      onSuccess={() => setFreigeschaltet(true)}
+    <Dashboard
+      onNavigate={(ziel) => setSeite(ziel)}
     />
   );
 }
-
-return (
+if (seite === "handbuch") {
+  return (
     <main
       style={{
         padding: "20px",
         maxWidth: "1000px",
         margin: "0 auto",
-        fontFamily: "Arial, sans-serif",
       }}
     >
-      <h1>📘 Günther-Patrick-System</h1>
+      <button
+        onClick={() => setSeite("dashboard")}
+        style={{
+          marginBottom: "20px",
+          padding: "10px 20px",
+          cursor: "pointer",
+        }}
+      >
+        ← Dashboard
+      </button>
 
-<div
-  style={{
-    background: "#111",
-    color: "#fff",
-    padding: "20px",
-    borderRadius: "10px",
-  }}
->
-  <ReactMarkdown>{handbuch}</ReactMarkdown>
-</div>
+      <h1>📘 Handbuch</h1>
+
+      <div
+        style={{
+          background: "#111",
+          color: "#fff",
+          padding: "20px",
+          borderRadius: "10px",
+        }}
+      >
+        <ReactMarkdown>{handbuch}</ReactMarkdown>
+      </div>
     </main>
   );
+}
+return null;
 }

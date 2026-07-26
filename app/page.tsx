@@ -7,6 +7,7 @@ import Dashboard from "../components/Dashboard";
 import Handbuch from "../components/Handbuch";
 import Tagebuch from "../components/Tagebuch";
 import GPS from "../components/GPS";
+import Trading from "../components/Trading";
 
 export default function Home() {
   const [freigeschaltet, setFreigeschaltet] = useState(false);
@@ -81,6 +82,13 @@ if (seite === "gps") {
   return (
     <GPS
       gps={gps}
+      onBack={() => setSeite("dashboard")}
+    />
+  );
+}
+if (seite === "traden") {
+  return (
+    <Trading
       onBack={() => setSeite("dashboard")}
     />
   );

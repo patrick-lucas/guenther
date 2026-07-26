@@ -11,6 +11,7 @@ export default function Home() {
   const [freigeschaltet, setFreigeschaltet] = useState(false);
   const [seite, setSeite] = useState("dashboard");
   const [handbuch, setHandbuch] = useState("Handbuch wird geladen...");
+  const [tagebuch, setTagebuch] = useState("Tagebuch wird geladen...");
 
   useEffect(() => {
     fetch("/handbuch.md")
@@ -22,6 +23,16 @@ export default function Home() {
         setHandbuch("Fehler beim Laden des Handbuchs.");
       });
   }, []);
+  useEffect(() => {
+  fetch("/tagebuch.md")
+    .then(async (res) => {
+      const text = await res.text();
+      setTagebuch(text);
+    })
+    .catch(() => {
+      setTagebuch("Fehler beim Laden des Tagebuchs.");
+    });
+}, []);
 
   if (!freigeschaltet) {
     return (
@@ -48,9 +59,10 @@ if (seite === "handbuch") {
 }
 if (seite === "tagebuch") {
   return (
-    <Tagebuch
-      onBack={() => setSeite("dashboard")}
-    />
+<Tagebuch
+  tagebuch={tagebuch}
+  onBack={() => setSeite("dashboard")}
+/>
   );
 }
 return null;

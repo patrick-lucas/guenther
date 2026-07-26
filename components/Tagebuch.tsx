@@ -1,8 +1,11 @@
+import ReactMarkdown from "react-markdown";
+
 type Props = {
+  tagebuch: string;
   onBack: () => void;
 };
 
-export default function Tagebuch({ onBack }: Props) {
+export default function Tagebuch({ tagebuch, onBack }: Props) {
   return (
     <main
       style={{
@@ -24,7 +27,16 @@ export default function Tagebuch({ onBack }: Props) {
 
       <h1>📒 Tagebuch</h1>
 
-      <p>Hier erscheint später das Trading-Tagebuch.</p>
+      <div
+        style={{
+          background: "#111",
+          color: "#fff",
+          padding: "20px",
+          borderRadius: "10px",
+        }}
+      >
+        <ReactMarkdown>{tagebuch}</ReactMarkdown>
+      </div>
     </main>
   );
 }

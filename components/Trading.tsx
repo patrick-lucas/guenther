@@ -25,22 +25,19 @@ export default function Trading({ onBack }: Props) {
       <h1>📈 Trading</h1>
 
       <div
-        style={{
-          border: "1px solid #333",
-          borderRadius: "12px",
-          padding: "20px",
-          minHeight: "500px",
-          background: "#181818",
-          marginTop: "20px",
-        }}
-      >
-        <h2>📊 Günther-Motor</h2>
-
-        <p style={{ color: "#888" }}>
-          Hier erscheint später der komplette Verlauf zwischen dir und dem
-          Günther-Motor.
-        </p>
-      </div>
+  style={{
+    border: "1px solid #333",
+    borderRadius: "12px",
+    padding: "20px",
+    minHeight: "600px",
+    background: "#181818",
+    marginTop: "20px",
+  }}
+>
+  <p style={{ color: "#888" }}>
+    Hier erscheint später der komplette Verlauf zwischen dir und dem Günther-Motor.
+  </p>
+</div>
     </main>
   );
 }

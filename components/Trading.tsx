@@ -1,21 +1,77 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../data/supabase";
 
 type Props = {
+  benutzer: {
+    id: number;
+    name: string;
+    budget: number;
+    broker: string;
+    waehrung: string;
+    administrator: boolean;
+  };
   onBack: () => void;
 };
 
-export default function Trading({ onBack }: Props) {
+export default function Trading({
+  benutzer,
+  onBack,
+}: Props) {
   const [messages, setMessages] = useState<string[]>([]);
   const [message, setMessage] = useState("");
 
-  const sendMessage = () => {
+  useEffect(() => {
+    console.log("Trading geöffnet");
+    console.log("Benutzer:", benutzer);
+
+    ladeNachrichten();
+  }, [benutzer]);
+
+  async function ladeNachrichten() {
+    const { data, error } = await supabase
+      .from("nachrichten")
+      .select("*")
+      .eq("benutzer_id", benutzer.id)
+      .order("created_at", { ascending: true });
+
+    console.log("Geladene Nachrichten:", data);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (data) {
+      setMessages(data.map((eintrag) => eintrag.nachricht));
+    }
+  }
+    const sendMessage = async () => {
     if (message.trim() === "") return;
 
-    setMessages((prev) => [...prev, message]);
+    const text = message;
     setMessage("");
-  };
 
-  return (
+    const { data, error } = await supabase
+      .from("nachrichten")
+      .insert({
+        benutzer_id: benutzer.id,
+        sender: benutzer.name,
+        nachricht: text,
+        typ: "text",
+      })
+      .select();
+
+    console.log("INSERT:", data);
+    console.log("INSERT-Fehler:", error);
+
+    if (error) {
+      setMessage(text);
+      return;
+    }
+
+    await ladeNachrichten();
+  };
+    return (
     <main
       style={{
         padding: "20px",
@@ -35,6 +91,15 @@ export default function Trading({ onBack }: Props) {
       </button>
 
       <h1>📈 Trading</h1>
+
+      <p
+        style={{
+          color: "#4caf50",
+          marginBottom: "20px",
+        }}
+      >
+        👤 Angemeldet als: {benutzer.name}
+      </p>
 
       <div
         style={{

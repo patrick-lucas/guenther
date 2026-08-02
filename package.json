@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/importer.ts && next build",
+    "handbuch": "tsx scripts/importer.ts", 
     "start": "next start",
     "lint": "eslint"
   },

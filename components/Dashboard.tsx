@@ -1,10 +1,21 @@
 "use client";
 
 type DashboardProps = {
+  benutzer: {
+    id: number;
+    name: string;
+    budget: number;
+    broker: string;
+    waehrung: string;
+    administrator: boolean;
+  };
   onNavigate: (seite: string) => void;
 };
 
-export default function Dashboard({ onNavigate }: DashboardProps) {
+export default function Dashboard({
+  benutzer,
+  onNavigate,
+}: DashboardProps) {
   return (
     <main
       style={{
@@ -22,6 +33,15 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       <p style={{ textAlign: "center", color: "#888" }}>
         Trading Dashboard
       </p>
+      <p
+  style={{
+    textAlign: "center",
+    color: "#4caf50",
+    marginTop: "10px",
+  }}
+>
+  👤 Angemeldet als: {benutzer.name}
+</p>
 
       <div
         style={{

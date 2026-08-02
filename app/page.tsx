@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../data/supabase";
+import UserSelection from "../components/UserSelection";
 import PasswordScreen from "../components/PasswordScreen";
 import Dashboard from "../components/Dashboard";
 import Handbuch from "../components/Handbuch";
@@ -11,6 +12,8 @@ import Trading from "../components/Trading";
 
 export default function Home() {
   const [freigeschaltet, setFreigeschaltet] = useState(false);
+  const [benutzerAusgewaehlt, setBenutzerAusgewaehlt] = useState(false);
+  const [aktuellerBenutzer, setAktuellerBenutzer] = useState<any>(null);  
   const [seite, setSeite] = useState("dashboard");
 
   const [handbuch, setHandbuch] = useState("Handbuch wird geladen...");
@@ -104,10 +107,31 @@ export default function Home() {
       />
     );
   }
+  if (!benutzerAusgewaehlt) {
+  return (
+<UserSelection
+  onSelect={async (name) => {
+    const { data, error } = await supabase
+      .from("benutzer")
+      .select("*")
+      .eq("name", name)
+      .single();
 
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    setAktuellerBenutzer(data);
+    setBenutzerAusgewaehlt(true);
+  }}
+/>
+  );
+}
   if (seite === "dashboard") {
     return (
       <Dashboard
+      benutzer={aktuellerBenutzer}
         onNavigate={(ziel) => setSeite(ziel)}
       />
     );
@@ -143,6 +167,7 @@ export default function Home() {
   if (seite === "traden") {
     return (
       <Trading
+        benutzer={aktuellerBenutzer}
         onBack={() => setSeite("dashboard")}
       />
     );

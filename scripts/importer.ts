@@ -13,7 +13,7 @@ const supabase = createClient(
 async function main() {
   console.log("Starte Handbuch-Import...");
 
-  const datei = path.join(process.cwd(), "public", "handbuch.md");
+  const datei = path.join(process.cwd(), "daten", "handbuch.md");
 
   const markdown = fs.readFileSync(datei, "utf8");
 
